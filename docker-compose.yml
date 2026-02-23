@@ -4,8 +4,12 @@ services:
 
   app:
     build:
-      context: .
       dockerfile: ./docker/app/Dockerfile
     restart: always
+
+  nginx:
+    build:
+      dockerfile: ./docker/nginx/Dockerfile
+    restart: always
     ports:
-      - "3000:3000"
+      - "9000:80"
