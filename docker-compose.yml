@@ -3,19 +3,24 @@ services:
   app:
     build:
       dockerfile: ./docker/app/Dockerfile
-    restart: always
+    restart: unless-stopped
 
   nginx:
     build:
       dockerfile: ./docker/nginx/Dockerfile
-    restart: always
+    restart: unless-stopped
     ports:
       - "9000:80"
 
   mysql:
     build:
       dockerfile: ./docker/mysql/Dockerfile
-    restart: always
+    restart: unless-stopped
     environment:
       - MYSQL_DATABASE=app_db
       - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

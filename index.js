@@ -16,6 +16,13 @@ async function addPerson(connection, name) {
     await connection.execute(sql, [name]);
 }
 
+async function getPeople(connection) {
+    const sql = 'SELECT name FROM people';
+    const [rows] = await connection.query(sql);
+
+    return rows;
+}
+
 app.get('/', async (req, res) => {
     let connection
     let html = '<h1>Full Cycle Rocks!</h1>'
@@ -24,6 +31,16 @@ app.get('/', async (req, res) => {
 
         connection = await mysql.createConnection(mysqlConfig)
         await addPerson(connection, `Person ${Math.floor(Math.random() * 1000)}`)
+
+        const people = await getPeople(connection)
+
+        html += '<ul>';
+
+        people.forEach(person => {
+            html += `  <li>${person.name}</li>`;
+        });
+
+        html += '</ul>';
 
     } catch (error) {
         console.log(error)
