@@ -1,0 +1,12 @@
+{
+    "name": "vessel2602-docker-node",
+    "version": "0.1.0",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "express": "^5.2.1",
+        "mysql": "^2.18.1"
+    }
+}
