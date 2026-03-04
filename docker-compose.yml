@@ -4,6 +4,12 @@ services:
     build:
       dockerfile: ./docker/app/Dockerfile
     restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
 
   nginx:
     build:
@@ -11,6 +17,8 @@ services:
     restart: unless-stopped
     ports:
       - "9000:80"
+    depends_on:
+      - app
 
   mysql:
     build:
@@ -21,6 +29,11 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mysql_data:
